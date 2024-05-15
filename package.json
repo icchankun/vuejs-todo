@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "fix": "prettier --write . && eslint --fix .",
+    "lint": "prettier --check . && eslint ."
+  },
+  "devDependencies": {
+    "eslint": "^9.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "globals": "^15.2.0",
+    "prettier": "^3.2.5",
+    "serve": "^14.2.3"
+  },
+  "type": "module"
+}
