@@ -1,4 +1,4 @@
-import { createApp, ref } from "vue";
+import { createApp, ref, onMounted, onBeforeUnmount } from "vue";
 
 const app = createApp({
   setup() {
@@ -16,6 +16,9 @@ const app = createApp({
     const id = ref(fetchSavedId());
     const todos = ref(fetchSavedTodos());
 
+    const setTodos = () => {
+      localStorage.setItem("todos", JSON.stringify(todos.value));
+    };
     const addTodo = () => {
       todos.value.push({
         id: ++id.value,
@@ -23,14 +26,19 @@ const app = createApp({
         done: false,
       });
       newTodoText.value = "";
-      localStorage.setItem("todos", JSON.stringify(todos.value));
+      setTodos();
       localStorage.setItem("id", todos.value.at(-1).id);
     };
-
     const deleteTodo = (selectedTodo) => {
       todos.value = todos.value.filter((todo) => todo !== selectedTodo);
-      localStorage.setItem("todos", JSON.stringify(todos.value));
+      setTodos();
     };
+    onMounted(() => {
+      window.addEventListener("beforeunload", setTodos);
+    });
+    onBeforeUnmount(() => {
+      window.removeEventListener("beforeunload", setTodos);
+    });
 
     return {
       newTodoText,
