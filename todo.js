@@ -1,16 +1,20 @@
-import { createApp, ref, onMounted } from "vue";
+import { createApp, ref } from "vue";
 
 const app = createApp({
   setup() {
     const newTodoText = ref("");
-    const todos = ref([]);
 
     const fetchSavedId = () => {
       const savedId = localStorage.getItem("id");
       return savedId ? JSON.parse(savedId) : 0;
     };
+    const fetchSavedTodos = () => {
+      const savedTodos = localStorage.getItem("todos");
+      return savedTodos ? JSON.parse(savedTodos) : [];
+    };
 
     const id = ref(fetchSavedId());
+    const todos = ref(fetchSavedTodos());
 
     const addTodo = () => {
       todos.value.push({
@@ -27,13 +31,6 @@ const app = createApp({
       todos.value = todos.value.filter((todo) => todo !== selectedTodo);
       localStorage.setItem("todos", JSON.stringify(todos.value));
     };
-
-    onMounted(() => {
-      const savedTodos = localStorage.getItem("todos");
-      if (savedTodos) {
-        todos.value = JSON.parse(savedTodos);
-      }
-    });
 
     return {
       newTodoText,
